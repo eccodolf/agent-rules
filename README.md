@@ -9,7 +9,23 @@
 - эксплуатации локального агентного решения;
 - проверке и валидации результатов, сгенерированных моделью.
 
+## Быстрый старт
+
+- [AI-правила и шаблон `.ai/`](.ai/README.md)
+- [Threat model для LLM](docs/llm-threat-model.md)
+- [LLM Testing Framework](docs/llm-testing-framework.md)
+- [Audit & Observability](docs/audit-observability.md)
+- [LLM Policy Engine](docs/llm-policy-engine.md)
+- [Runtime Guardrails](docs/runtime-guardrails.md)
+- [Prompt Compiler](docs/prompt-compiler.md)
+- [Policy-as-Code](docs/policy-as-code.md)
+- [Simulation Environment](docs/simulation-environment.md)
+- [Финансовые сценарии](docs/banking-scenarios.md)
+- [Anti-Fraud DSL](docs/anti-fraud-dsl.md)
+
 ## Структура
+
+### Базовая документация
 
 - [docs/architecture.md](docs/architecture.md) — архитектура локального решения и границы доверия
 - [docs/security.md](docs/security.md) — требования информационной безопасности
@@ -19,6 +35,41 @@
 - [docs/operations.md](docs/operations.md) — эксплуатация, логирование, мониторинг и обновления
 - [docs/validation.md](docs/validation.md) — проверка результатов модели и контроль качества
 - [docs/checklists.md](docs/checklists.md) — короткие практические чек-листы для повседневной работы
+
+### Управление агентами через файлы проекта
+
+- [docs/agent-markdown-files.md](docs/agent-markdown-files.md) — использование Markdown-файлов для управления агентами
+- [docs/agent-ignore.md](docs/agent-ignore.md) — правила для `.agentignore`, `.aiignore`, `.llmignore`
+
+### AI governance и production control plane
+
+- [docs/llm-threat-model.md](docs/llm-threat-model.md) — модель угроз для LLM и локального агента
+- [docs/llm-testing-framework.md](docs/llm-testing-framework.md) — тестирование prompt templates, сценариев и регрессий
+- [docs/audit-observability.md](docs/audit-observability.md) — аудит, трассировка и наблюдаемость
+- [docs/llm-policy-engine.md](docs/llm-policy-engine.md) — policy engine для input/context/tool/output
+- [docs/decision-logging.md](docs/decision-logging.md) — логирование решений агента и explainability
+- [docs/runtime-guardrails.md](docs/runtime-guardrails.md) — runtime enforcement и inline guardrails
+- [docs/prompt-compiler.md](docs/prompt-compiler.md) — компиляция Prompt DSL в нормализованный prompt
+- [docs/policy-as-code.md](docs/policy-as-code.md) — декларативные политики как код
+- [docs/simulation-environment.md](docs/simulation-environment.md) — среда симуляции для безопасной проверки сценариев
+- [docs/synthetic-test-data.md](docs/synthetic-test-data.md) — генерация синтетических тестовых данных
+- [docs/banking-scenarios.md](docs/banking-scenarios.md) — финансовые и платежные сценарии
+- [docs/anti-fraud-dsl.md](docs/anti-fraud-dsl.md) — DSL для антифрод-логики
+
+### Директория `.ai/`
+
+- [.ai/README.md](.ai/README.md) — структура и порядок использования `.ai/`
+- [.ai/system/security-rules.md](.ai/system/security-rules.md) — обязательные системные правила безопасности
+- [.ai/project/prompt-templates.md](.ai/project/prompt-templates.md) — production-ready шаблоны промптов
+- [.ai/project/prompt-dsl.md](.ai/project/prompt-dsl.md) — стандартизированный Prompt DSL
+- [.ai/modules/fastapi.md](.ai/modules/fastapi.md)
+- [.ai/modules/django.md](.ai/modules/django.md)
+- [.ai/modules/celery.md](.ai/modules/celery.md)
+- [.ai/modules/postgres.md](.ai/modules/postgres.md)
+- [.ai/modules/redis.md](.ai/modules/redis.md)
+- [.ai/modules/vault.md](.ai/modules/vault.md)
+- [.ai/modules/devops.md](.ai/modules/devops.md)
+- [.ai/modules/banking.md](.ai/modules/banking.md)
 
 ## Цели документа
 
@@ -43,7 +94,8 @@
 2. Затем утвердить правила ИБ и безопасной разработки.
 3. После этого подготовить шаблоны промптов и правила ограничения контекста.
 4. Далее включить логирование, мониторинг и процессы валидации.
-5. В конце оформить чек-листы для пользователей и сопровождающих команд.
+5. Затем внедрить policy engine, runtime guardrails и testing framework.
+6. В конце оформить чек-листы для пользователей и сопровождающих команд.
 
 ## Для кого этот набор правил
 
@@ -60,6 +112,8 @@
 - [security.md](docs/security.md)
 - [secure-development.md](docs/secure-development.md)
 - [validation.md](docs/validation.md)
+- [llm-policy-engine.md](docs/llm-policy-engine.md)
+- [runtime-guardrails.md](docs/runtime-guardrails.md)
 
 ## Минимальный стандарт использования
 
@@ -70,4 +124,6 @@
 - шаблоны промптов;
 - правила сокращения контекста;
 - обязательную валидацию выходного результата;
+- testing framework для промптов и сценариев;
+- policy engine и runtime guardrails;
 - процесс обновления модели и промптов через контроль изменений.
