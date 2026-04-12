@@ -1,0 +1,7 @@
+- rule_id: OUTPUT-SECRET
+  condition: contains_secret
+  action: block
+
+- rule_id: SQL-UNSAFE
+  condition: raw_sql
+  action: warn
