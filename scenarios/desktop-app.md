@@ -45,18 +45,28 @@ project-root/
   .env.example
 ```
 
-## Команды для создания структуры
+## Команды для получения каркаса из git
 
 ```powershell
-New-Item -ItemType Directory -Force src, src\app, src\ui, src\services, src\storage, src\security, src\logging, src\config
-New-Item -ItemType Directory -Force tests, tests\unit, tests\integration, assets, docs, scripts
-New-Item -ItemType File -Force AGENTS.md, pyproject.toml, .env.example
+$repo = "https://github.com/eccodolf/agent-rules.git"
+git clone --depth 1 --filter=blob:none --sparse $repo _bootstrap
+Set-Location _bootstrap
+git sparse-checkout set .ai templates/scenarios/desktop-app
+Set-Location ..
+Copy-Item -Recurse -Force _bootstrap\.ai .
+Copy-Item -Recurse -Force _bootstrap\templates\scenarios\desktop-app\* .
+Remove-Item -Recurse -Force _bootstrap
 ```
 
 ```bash
-mkdir -p src/app src/ui src/services src/storage src/security src/logging src/config
-mkdir -p tests/unit tests/integration assets docs scripts
-touch AGENTS.md pyproject.toml .env.example
+repo="https://github.com/eccodolf/agent-rules.git"
+git clone --depth 1 --filter=blob:none --sparse "$repo" _bootstrap
+cd _bootstrap
+git sparse-checkout set .ai templates/scenarios/desktop-app
+cd ..
+cp -R _bootstrap/.ai ./
+cp -R _bootstrap/templates/scenarios/desktop-app/. ./
+rm -rf _bootstrap
 ```
 
 ## Что сказать Qwen Code после создания каркаса

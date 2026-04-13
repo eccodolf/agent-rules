@@ -49,20 +49,28 @@ project-root/
   pyproject.toml
 ```
 
-## Команды для создания структуры
+## Команды для получения каркаса из git
 
 ```powershell
-New-Item -ItemType Directory -Force ci, ci\pipelines, ci\templates
-New-Item -ItemType Directory -Force deploy, deploy\docker, deploy\compose, deploy\kubernetes, deploy\nginx
-New-Item -ItemType Directory -Force scripts, scripts\release, scripts\rollback, scripts\checks, docs, docs\runbooks, tests, tests\smoke
-New-Item -ItemType File -Force AGENTS.md, .env.example, Makefile, pyproject.toml
+$repo = "https://github.com/eccodolf/agent-rules.git"
+git clone --depth 1 --filter=blob:none --sparse $repo _bootstrap
+Set-Location _bootstrap
+git sparse-checkout set .ai templates/scenarios/devops-pipeline
+Set-Location ..
+Copy-Item -Recurse -Force _bootstrap\.ai .
+Copy-Item -Recurse -Force _bootstrap\templates\scenarios\devops-pipeline\* .
+Remove-Item -Recurse -Force _bootstrap
 ```
 
 ```bash
-mkdir -p ci/pipelines ci/templates
-mkdir -p deploy/docker deploy/compose deploy/kubernetes deploy/nginx
-mkdir -p scripts/release scripts/rollback scripts/checks docs/runbooks tests/smoke
-touch AGENTS.md .env.example Makefile pyproject.toml
+repo="https://github.com/eccodolf/agent-rules.git"
+git clone --depth 1 --filter=blob:none --sparse "$repo" _bootstrap
+cd _bootstrap
+git sparse-checkout set .ai templates/scenarios/devops-pipeline
+cd ..
+cp -R _bootstrap/.ai ./
+cp -R _bootstrap/templates/scenarios/devops-pipeline/. ./
+rm -rf _bootstrap
 ```
 
 ## Что сказать Qwen Code после создания каркаса

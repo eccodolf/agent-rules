@@ -58,25 +58,28 @@ project-root/
   .env.example
 ```
 
-## Команды для создания структуры
+## Команды для получения каркаса из git
 
 ```powershell
-New-Item -ItemType Directory -Force app, docs, tests, scripts, requirements
-New-Item -ItemType Directory -Force app\config, app\config\settings, app\apps, app\apps\customers, app\apps\customers\tests, app\apps\audit, app\apps\audit\tests
-New-Item -ItemType File -Force AGENTS.md, pyproject.toml, .env.example
-New-Item -ItemType File -Force app\manage.py, app\config\urls.py, app\config\wsgi.py, app\config\asgi.py
-New-Item -ItemType File -Force app\config\settings\base.py, app\config\settings\dev.py, app\config\settings\prod.py
-New-Item -ItemType File -Force app\apps\customers\models.py, app\apps\customers\views.py, app\apps\customers\services.py, app\apps\customers\selectors.py, app\apps\customers\forms.py, app\apps\customers\urls.py
-New-Item -ItemType File -Force app\apps\audit\models.py, app\apps\audit\services.py
+$repo = "https://github.com/eccodolf/agent-rules.git"
+git clone --depth 1 --filter=blob:none --sparse $repo _bootstrap
+Set-Location _bootstrap
+git sparse-checkout set .ai templates/scenarios/django-service
+Set-Location ..
+Copy-Item -Recurse -Force _bootstrap\.ai .
+Copy-Item -Recurse -Force _bootstrap\templates\scenarios\django-service\* .
+Remove-Item -Recurse -Force _bootstrap
 ```
 
 ```bash
-mkdir -p app/config/settings app/apps/customers/tests app/apps/audit/tests docs tests scripts requirements
-touch AGENTS.md pyproject.toml .env.example
-touch app/manage.py app/config/urls.py app/config/wsgi.py app/config/asgi.py
-touch app/config/settings/base.py app/config/settings/dev.py app/config/settings/prod.py
-touch app/apps/customers/models.py app/apps/customers/views.py app/apps/customers/services.py app/apps/customers/selectors.py app/apps/customers/forms.py app/apps/customers/urls.py
-touch app/apps/audit/models.py app/apps/audit/services.py
+repo="https://github.com/eccodolf/agent-rules.git"
+git clone --depth 1 --filter=blob:none --sparse "$repo" _bootstrap
+cd _bootstrap
+git sparse-checkout set .ai templates/scenarios/django-service
+cd ..
+cp -R _bootstrap/.ai ./
+cp -R _bootstrap/templates/scenarios/django-service/. ./
+rm -rf _bootstrap
 ```
 
 ## Что сказать Qwen Code после создания каркаса

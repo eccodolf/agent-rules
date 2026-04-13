@@ -48,20 +48,28 @@ project-root/
   .env.example
 ```
 
-## Команды для создания структуры
+## Команды для получения каркаса из git
 
 ```powershell
-New-Item -ItemType Directory -Force gateway, gateway\routes, gateway\clients, gateway\middleware, gateway\security, gateway\observability
-New-Item -ItemType Directory -Force deploy, deploy\nginx, deploy\docker, deploy\k8s, tests, tests\unit, tests\integration, docs, scripts
-New-Item -ItemType File -Force AGENTS.md, pyproject.toml, .env.example
-New-Item -ItemType File -Force gateway\main.py, gateway\config.py, gateway\observability\logging.py, gateway\observability\metrics.py
+$repo = "https://github.com/eccodolf/agent-rules.git"
+git clone --depth 1 --filter=blob:none --sparse $repo _bootstrap
+Set-Location _bootstrap
+git sparse-checkout set .ai templates/scenarios/proxy-service
+Set-Location ..
+Copy-Item -Recurse -Force _bootstrap\.ai .
+Copy-Item -Recurse -Force _bootstrap\templates\scenarios\proxy-service\* .
+Remove-Item -Recurse -Force _bootstrap
 ```
 
 ```bash
-mkdir -p gateway/routes gateway/clients gateway/middleware gateway/security gateway/observability
-mkdir -p deploy/nginx deploy/docker deploy/k8s tests/unit tests/integration docs scripts
-touch AGENTS.md pyproject.toml .env.example
-touch gateway/main.py gateway/config.py gateway/observability/logging.py gateway/observability/metrics.py
+repo="https://github.com/eccodolf/agent-rules.git"
+git clone --depth 1 --filter=blob:none --sparse "$repo" _bootstrap
+cd _bootstrap
+git sparse-checkout set .ai templates/scenarios/proxy-service
+cd ..
+cp -R _bootstrap/.ai ./
+cp -R _bootstrap/templates/scenarios/proxy-service/. ./
+rm -rf _bootstrap
 ```
 
 ## Что сказать Qwen Code после создания каркаса

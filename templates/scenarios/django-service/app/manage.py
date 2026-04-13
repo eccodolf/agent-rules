@@ -1,0 +1,1 @@
+# Django management entrypoint placeholder

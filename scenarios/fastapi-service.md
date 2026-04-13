@@ -53,20 +53,28 @@ project-root/
   .env.example
 ```
 
-## Команды для создания структуры
+## Команды для получения каркаса из git
 
 ```powershell
-New-Item -ItemType Directory -Force app, app\api, app\api\routers, app\api\dependencies, app\services, app\repositories, app\schemas, app\models, app\db, app\db\migrations, app\workers, app\core
-New-Item -ItemType Directory -Force tests, tests\unit, tests\integration, docs, scripts
-New-Item -ItemType File -Force AGENTS.md, pyproject.toml, .env.example
-New-Item -ItemType File -Force app\main.py, app\db\session.py, app\core\config.py, app\core\logging.py
+$repo = "https://github.com/eccodolf/agent-rules.git"
+git clone --depth 1 --filter=blob:none --sparse $repo _bootstrap
+Set-Location _bootstrap
+git sparse-checkout set .ai templates/scenarios/fastapi-service
+Set-Location ..
+Copy-Item -Recurse -Force _bootstrap\.ai .
+Copy-Item -Recurse -Force _bootstrap\templates\scenarios\fastapi-service\* .
+Remove-Item -Recurse -Force _bootstrap
 ```
 
 ```bash
-mkdir -p app/api/routers app/api/dependencies app/services app/repositories app/schemas app/models app/db/migrations app/workers app/core
-mkdir -p tests/unit tests/integration docs scripts
-touch AGENTS.md pyproject.toml .env.example
-touch app/main.py app/db/session.py app/core/config.py app/core/logging.py
+repo="https://github.com/eccodolf/agent-rules.git"
+git clone --depth 1 --filter=blob:none --sparse "$repo" _bootstrap
+cd _bootstrap
+git sparse-checkout set .ai templates/scenarios/fastapi-service
+cd ..
+cp -R _bootstrap/.ai ./
+cp -R _bootstrap/templates/scenarios/fastapi-service/. ./
+rm -rf _bootstrap
 ```
 
 ## Что сказать Qwen Code после создания каркаса
