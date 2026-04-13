@@ -167,7 +167,7 @@ Django проект.
 
 Требования безопасности:
 - no secrets
-- mask PII
+- маскировать персональные данные
 - controlled error handling
 
 Формат:

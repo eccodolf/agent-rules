@@ -69,7 +69,7 @@ OUTPUT:
 
 Требования ИБ и secure development:
 - no secrets;
-- mask PII;
+- маскировать персональные данные;
 - parameterized SQL only;
 - audit logging required;
 - no destructive commands.
@@ -163,7 +163,7 @@ CONSTRAINTS:
 
 SECURITY:
 - no secrets
-- mask PII
+- маскировать персональные данные
 - parameterized SQL only
 
 OUTPUT:
