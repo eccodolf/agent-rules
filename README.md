@@ -23,6 +23,12 @@
 8. [docs/checklists.md](docs/checklists.md)
 9. [`.ai/README.md`](.ai/README.md)
 
+## Сценарии
+
+Для типовых вариантов использования Qwen Code смотрите отдельный раздел:
+
+- [scenarios/README.md](scenarios/README.md) — сценарии для Django, FastAPI, прокси-сервиса, десктопного приложения и DevOps-пайплайна, с целевой структурой проекта и командами для PowerShell и Linux/OEL
+
 ## Структура репозитория
 
 ### Базовые документы
