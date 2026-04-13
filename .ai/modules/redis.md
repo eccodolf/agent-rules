@@ -29,6 +29,13 @@
 - Для rate limiting понимать поведение при burst и degraded mode.
 - Для async coordination не смешивать техническое состояние и бизнес-состояние без причины.
 
+## Логирование
+
+- Логировать cache hit/miss, lock acquire/release failures и rate-limit decisions без утечки значений ключей.
+- Не логировать полные значения ключей, если они содержат идентификаторы клиентов, операций или иные чувствительные данные.
+- Для Redis outage и timeout логировать деградацию сервиса и fallback behavior.
+- Для distributed lock конфликтов логирование должно позволять расследовать lost ownership и duplicate execution.
+
 ## Архитектурные рекомендации
 
 - Ключи именовать в формате `service:domain:entity:id[:suffix]`.

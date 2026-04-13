@@ -32,6 +32,13 @@
 - Для ошибок различать client error, business error и infrastructure error.
 - Не блокировать event loop CPU-heavy задачами и синхронным I/O без причины.
 
+## Логирование
+
+- Логировать request id, route, статус ответа и ключевые бизнес-события без чувствительного payload.
+- Не логировать authorization headers, cookies, токены и персональные данные в явном виде.
+- Для mutating endpoint логировать безопасный идентификатор операции и outcome.
+- Разделять client validation errors, business rule violations и infrastructure failures.
+
 ## Архитектурные рекомендации
 
 - `api/routers/` — только HTTP-слой.
