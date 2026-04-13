@@ -61,6 +61,7 @@
 
 - [docs/banking-scenarios.md](docs/banking-scenarios.md) — типовые банковские сценарии
 - [docs/anti-fraud-dsl.md](docs/anti-fraud-dsl.md) — DSL и подходы для антифрод-логики
+- [scenarios/README.md](scenarios/README.md) — практические сценарии использования и целевые структуры проектов для Qwen Code
 
 ### Агентные правила в `.ai/`
 
