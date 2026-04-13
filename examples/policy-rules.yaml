@@ -1,7 +1,144 @@
-- rule_id: OUTPUT-SECRET
-  condition: contains_secret
-  action: block
+- rule_id: INPUT-JAILBREAK-001
+  scope: input
+  description: Block common jailbreak and system-override patterns.
+  condition:
+    any:
+      - contains: "ignore previous instructions"
+      - contains: "disregard system prompt"
+      - contains: "developer mode"
+  severity: block
+  action: reject_request
+  message: "Input contains a prompt injection or jailbreak pattern."
 
-- rule_id: SQL-UNSAFE
-  condition: raw_sql
-  action: warn
+- rule_id: INPUT-DESTRUCTIVE-002
+  scope: input
+  description: Require human review for destructive infrastructure or database actions.
+  condition:
+    any:
+      - contains: "drop database"
+      - contains: "truncate table"
+      - contains: "kubectl delete"
+      - contains: "rm -rf"
+  severity: require_human_review
+  action: hold_for_approval
+  message: "High-risk destructive action requires human approval."
+
+- rule_id: CONTEXT-SECRETS-003
+  scope: context
+  description: Block secret-bearing files from entering the model context.
+  condition:
+    any:
+      - file_path_matches: "*.env"
+      - file_path_matches: "*.pem"
+      - file_path_matches: "*.key"
+      - file_path_matches: "secrets/**"
+      - file_path_matches: "keys/**"
+  severity: block
+  action: strip_context_and_fail
+  message: "Context contains secret-bearing files."
+
+- rule_id: CONTEXT-CONFIDENTIAL-004
+  scope: context
+  description: Block unmasked banking or commercial secret materials.
+  condition:
+    any:
+      - file_path_matches: "exports/**"
+      - file_path_matches: "reports/**"
+      - contains: "внутренний лимит"
+      - contains: "anti-fraud threshold"
+      - contains: "условия договора"
+  severity: block
+  action: strip_context_and_fail
+  message: "Context contains banking secrecy or commercial secret data."
+
+- rule_id: TOOL-PROD-INFRA-005
+  scope: tool
+  description: Allow read-only infrastructure inspection, but gate production writes.
+  condition:
+    all:
+      - tool_in:
+          - kubectl
+          - terraform
+          - helm
+      - operation_type: mutating
+      - environment: production
+  severity: require_human_review
+  action: hold_for_approval
+  message: "Production infrastructure mutations require human approval."
+
+- rule_id: TOOL-VAULT-READ-006
+  scope: tool
+  description: Block direct secret value retrieval by the agent.
+  condition:
+    all:
+      - tool_in:
+          - vault
+      - operation_in:
+          - read_secret
+          - export_secret
+  severity: block
+  action: deny_tool_call
+  message: "Direct secret retrieval is not allowed for the agent."
+
+- rule_id: OUTPUT-SECRET-007
+  scope: output
+  description: Block outputs containing hardcoded secrets or secret-looking values.
+  condition:
+    any:
+      - contains_secret: true
+      - regex_matches: "AKIA[0-9A-Z]{16}"
+      - regex_matches: "-----BEGIN (RSA|EC|OPENSSH) PRIVATE KEY-----"
+  severity: block
+  action: redact_and_fail
+  message: "Output contains secret material."
+
+- rule_id: OUTPUT-PERSONAL-DATA-008
+  scope: output
+  description: Block unmasked personal data in the final answer.
+  condition:
+    any:
+      - contains_personal_data: true
+      - regex_matches: "\\b\\d{16}\\b"
+      - regex_matches: "\\b\\d{3}-\\d{2}-\\d{4}\\b"
+  severity: block
+  action: redact_and_fail
+  message: "Output contains unmasked personal data."
+
+- rule_id: OUTPUT-BANKING-CONFIDENTIAL-009
+  scope: output
+  description: Block disclosure of banking secrecy or commercial secret materials.
+  condition:
+    any:
+      - contains: "внутренний порог антифрода"
+      - contains: "внутренний лимит"
+      - contains: "служебная ставка риска"
+      - contains: "непубличные условия договора"
+  severity: block
+  action: redact_and_fail
+  message: "Output contains banking secrecy or commercial secret data."
+
+- rule_id: OUTPUT-SQL-UNSAFE-010
+  scope: output
+  description: Warn when SQL appears unparameterized or overly broad.
+  condition:
+    any:
+      - regex_matches: "SELECT \\*"
+      - regex_matches: "DELETE FROM [a-zA-Z0-9_]+\\s*;"
+      - regex_matches: "UPDATE [a-zA-Z0-9_]+ SET .+;$"
+  severity: warn
+  action: annotate_response
+  message: "Potentially unsafe SQL detected. Review required."
+
+- rule_id: OUTPUT-BANKING-CONTROLS-011
+  scope: output
+  description: Block banking-critical designs that miss mandatory controls.
+  condition:
+    all:
+      - domain: banking
+      - any_missing:
+          - idempotency
+          - audit_trail
+          - rollback_or_compensation
+  severity: block
+  action: fail_validation
+  message: "Banking flow is missing mandatory controls."

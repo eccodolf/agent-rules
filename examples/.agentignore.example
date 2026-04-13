@@ -1,0 +1,32 @@
+# Secrets and credentials
+.env
+.env.*
+*.pem
+*.key
+secrets/
+keys/
+
+# Large and noisy artifacts
+*.log
+logs/
+*.dump
+*.sqlite3
+backups/
+
+# Build and dependency directories
+node_modules/
+dist/
+build/
+.venv/
+venv/
+
+# Generated or irrelevant assets
+coverage/
+.pytest_cache/
+tmp/
+artifacts/
+
+# Files that may contain confidential exports
+exports/
+reports/
+
